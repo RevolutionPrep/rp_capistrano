@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = RpCapistrano::VERSION
   gem.authors       = ["Larry Sprock"]
   gem.email         = ["larry.sprock@revolutionprep.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{This is a gem that houses all of our cap recipes}
+  gem.summary       = %q{Revolution Prep cap recipes}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
