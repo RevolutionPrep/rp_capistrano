@@ -2,29 +2,26 @@ module RPCapistrano
   module Rvm
     def self.load_into(configuration)
       configuration.load do
-        before 'deploy:setup', 'rvm:create_gemset'
-        before 'deploy:update_code', 'rvm:info'
-        after 'deploy:setup', 'rvm:create_rake_wrapper'
+        before 'deploy:update_code', 'rp:rvm:info'
+        after 'deploy:setup', 'rp:rvm:create_rake_wrapper'
 
-        set :rvm_type, :system
-        set :rvm_ruby_string, :local
-        require 'rvm/capistrano'
-
-        namespace :rvm do
-          desc "Prints out the current rvm environment"
-          task :info, :roles => :app, :only => { :primary => true } do
-            puts " ** RVM INFO ======================================================"
-            run "rvm info" do |ch, stream, data|
-              puts data
+        namespace :rp do
+          namespace :rvm do
+            desc "Prints out the current rvm environment"
+            task :info, :roles => :app, :only => { :primary => true } do
+              puts " ** RVM INFO ======================================================"
+              run "rvm info" do |ch, stream, data|
+                puts data
+              end
+              puts " ** =============================================================="
+              puts "\n"
             end
-            puts " ** =============================================================="
-            puts "\n"
-          end
 
-          desc "Create rake wrapper"
-          task :create_rake_wrapper do
-            ruby_version = /[0-9]\.[0-9]\.[0-9]/.match(rvm_ruby_string).to_s.gsub('.', '')
-            run "rvm wrapper #{rvm_ruby_string} #{app_name}_#{ruby_version} rake"
+            desc "Create rake wrapper"
+            task :create_rake_wrapper do
+              ruby_version = /[0-9]\.[0-9]\.[0-9]/.match(rvm_ruby_string).to_s.gsub('.', '')
+              run "rvm wrapper #{rvm_ruby_string} #{app_name}_#{ruby_version} rake"
+            end
           end
         end
       end

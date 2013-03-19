@@ -2,6 +2,7 @@ require 'capistrano'
 require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'airbrake/capistrano'
+require 'rvm/capistrano'
 
 def _cset(name, *args, &block)
   unless exists?(name)
@@ -14,8 +15,12 @@ module RPCapistrano
   module Base
     def self.load_into(configuration)
       configuration.load do
-        after "deploy:restart", "deploy:cleanup"
-        
+        after 'deploy:restart', 'deploy:cleanup'
+        before 'deploy:setup', 'rvm:create_gemset'
+
+        set :rvm_type, :system
+        set :rvm_ruby_string, :local
+
         # User details
         _cset :user,          'capi'
         _cset(:group)         { user }
