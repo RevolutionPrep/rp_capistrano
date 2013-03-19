@@ -3,10 +3,10 @@ require 'new_relic/recipes'
 module RPCapistrano
   module NewRelic
     def self.load_into(configuration)
-      after 'deploy:update_code', 'rp:newrelic:enable_monitoring'
-      after 'rp:newrelic:enable_monitoring', 'rp:newrelic:deploy'
-
       configuration.load do
+        after 'deploy:update_code', 'rp:newrelic:enable_monitoring'
+        after 'rp:newrelic:enable_monitoring', 'rp:newrelic:deploy'
+
         namespace :rp do
           namespace :newrelic do
             task :enable_monitoring, :roles => :web do
