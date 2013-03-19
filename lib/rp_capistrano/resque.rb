@@ -3,7 +3,7 @@ module RPCapistrano
     def self.load_into(configuration)
       configuration.load do
         after 'deploy:restart', 'rp:resque:load_god_config'
-        after 'resque:load_god_config', 'rp:resque:kill_processes'
+        after 'rp:resque:load_god_config', 'rp:resque:kill_processes'
 
         namespace :rp do
           namespace :resque do
