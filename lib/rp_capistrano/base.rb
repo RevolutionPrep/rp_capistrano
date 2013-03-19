@@ -4,13 +4,6 @@ require 'bundler/capistrano'
 require 'airbrake/capistrano'
 require 'rvm/capistrano'
 
-def _cset(name, *args, &block)
-  unless exists?(name)
-    puts "setting: #{name}"
-    set(name, *args, &block)
-  end
-end
-
 module RPCapistrano
   module Base
     def self.load_into(configuration)
