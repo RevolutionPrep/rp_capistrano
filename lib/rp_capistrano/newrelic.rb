@@ -3,12 +3,16 @@ require 'new_relic/recipes'
 module RPCapistrano
   module NewRelic
     def self.load_into(configuration)
-      after 'deploy:update_code', 'rp:config_copy:newrelic_yml'
-      after 'rp:config_copy:newrelic_yml', 'rp:newrelic:deploy'
+      after 'deploy:update_code', 'rp:newrelic:enable_monitoring'
+      after 'rp:newrelic:enable_monitoring', 'rp:newrelic:deploy'
 
       configuration.load do
         namespace :rp do
           namespace :newrelic do
+            task :enable_monitoring, :roles => :web do
+              run "cp #{release_path}/config/newrelic.enable.yml #{release_path}/config/newrelic.yml"
+            end
+
             desc "Sets newrelic deployment parameters"
             task :deploy, :except => { :no_release => true } do
 

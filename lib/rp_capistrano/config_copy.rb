@@ -9,9 +9,6 @@ module RPCapistrano
             task :database_yml do
               run "cp #{release_path}/config/deploy/#{rails_env}/database.yml #{release_path}/config/database.yml"
             end
-            task :newrelic_yml do
-              run "cp #{release_path}/config/newrelic.enable.yml #{release_path}/config/newrelic.yml"
-            end
             task :polaris_yml do
               run "cp #{release_path}/config/deploy/#{rails_env}/polaris.yml #{release_path}/config/polaris.yml"
             end
