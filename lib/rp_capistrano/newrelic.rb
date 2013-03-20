@@ -4,8 +4,9 @@ module RPCapistrano
   module NewRelic
     def self.load_into(configuration)
       configuration.load do
-        after 'deploy:update_code', 'rp:newrelic:enable_monitoring'
+        after 'deploy:update', 'rp:newrelic:enable_monitoring'
         after 'rp:newrelic:enable_monitoring', 'rp:newrelic:deploy'
+        after 'rp:newrelic:deploy', 'newrelic:notice_deployment'
 
         namespace :rp do
           namespace :newrelic do
@@ -21,9 +22,7 @@ module RPCapistrano
               set :newrelic_appname, fetch(:app_name)
               set :newrelic_desc, `uname -a`
 
-              get_changelog = "cd #{fetch(:release_path)} && sudo -u #{fetch(:sudo_user)} git log --no-color --pretty=format:'  * %an: %s' --abbrev-commit --no-merges #{fetch(:fresh_revision, 'HEAD^3')}..HEAD"
-
-              run get_changelog, :roles => :app, :only => { :primary => true }  do |ch, stream, data|
+              run "cd #{fetch(:release_path)} && git log --no-color --pretty=format:'  * %an: %s' --abbrev-commit --no-merges #{fetch(:fresh_revision, 'HEAD^3')}..HEAD", :roles => :app, :only => { :primary => true }  do |ch, stream, data|
                 set :newrelic_changelog, data
               end
 
