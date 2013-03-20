@@ -22,5 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rvm-capistrano'
   gem.add_dependency 'airbrake'
   gem.add_dependency 'bundler'
-  gem.add_dependency 'newrelic_rpm'
+  gem.add_dependency 'newrelic_rpm', '~> 3.5.8.72'
 end
