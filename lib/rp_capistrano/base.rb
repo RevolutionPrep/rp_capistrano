@@ -12,7 +12,7 @@ module RPCapistrano
         before 'deploy:setup', 'rvm:create_gemset'
 
         set :rvm_type, :system
-        set :rvm_ruby_string, :local
+        _cset :rvm_ruby_string, :local
 
         # User details
         _cset :user,          'capi'
