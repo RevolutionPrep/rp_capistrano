@@ -2,8 +2,6 @@ module RPCapistrano
   module CopyConfig
     def self.load_into(configuration)
       configuration.load do
-        before "deploy:restart", "rp:config_copy:passenger_yml"
-
         namespace :rp do
           namespace :config_copy do
             task :database_yml do
