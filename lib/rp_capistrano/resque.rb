@@ -3,7 +3,7 @@ module RPCapistrano
     def self.load_into(configuration)
       configuration.load do
         after 'deploy:restart', 'rp:resque:load_god_config'
-        after 'rp:resque:load_god_config', 'rp:resque:kill_processes'
+        after 'rp:resque:load_god_config', 'rp:resque:restart_god_workers'
 
         namespace :rp do
           namespace :resque do
@@ -11,6 +11,14 @@ module RPCapistrano
             task :load_god_config, :roles => :god, :on_no_matching_servers => :continue do
               puts " ** LOADING RESQUE GOD CONFIG ====================================="
               run "sudo /usr/local/rvm/bin/boot_god load #{release_path}/config/god/resque.god"
+            end
+
+            desc "Restart god workers"
+            task :restart_god_workers, :roles => :god, :on_no_matching_servers => :continue do
+              puts " ** LOADING RESQUE GOD CONFIG ====================================="
+              run "sudo /usr/local/rvm/bin/boot_god restart #{app_name}-resque" do |ch, stream, data|
+                puts data
+              end
             end
 
             desc "Kill resque workers and reload god config"
