@@ -3,7 +3,7 @@ module RPCapistrano
     def self.load_into(configuration)
       configuration.load do
         after 'deploy:restart', 'rp:resque:load_god_config'
-        after 'rp:resque:load_god_config', 'rp:resque:restart_god_workers'
+        after 'rp:resque:load_god_config', 'rp:resque:kill_processes'
 
         namespace :rp do
           namespace :resque do
@@ -25,7 +25,7 @@ module RPCapistrano
             task :kill_processes, :roles => :god, :on_no_matching_servers => :continue do 
               puts " ** KILLING RESQUE WORKERS ========================================"
               run "sudo ps -e -o pid,command | grep resque-1 | awk '{ if ($2!=\"grep\") system(\"echo Killing \" $2 \" \" $1 \";sudo kill -3 \" $1)}'" do |ch, stream, data|
-                puts "     > #{data}"
+                puts data
               end
             end
           end
