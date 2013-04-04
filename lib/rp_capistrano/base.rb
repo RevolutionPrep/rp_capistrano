@@ -39,7 +39,6 @@ module RPCapistrano
 
         # Git settings for Capistrano
         default_run_options[:pty]     = true # needed for git password prompts
-        ssh_options[:forward_agent]   = true # use the keys for the person running the cap command to check out the app
 
         namespace :deploy do
           task :start do ; end
