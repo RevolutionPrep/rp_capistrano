@@ -46,6 +46,16 @@ module RPCapistrano
           task :restart, :roles => :app, :except => { :no_release => true } do
             run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
           end
+
+          desc "Make sure local git is in sync with remote."
+          task :check_revision, roles: :web do
+            unless `git rev-parse HEAD` == `git rev-parse origin/#{branch}`
+              puts "WARNING: HEAD is not the same as origin/#{branch}"
+              puts "Run `git push` to sync changes."
+              exit
+            end
+          end
+          before "deploy", "deploy:check_revision"
         end
       end
     end
