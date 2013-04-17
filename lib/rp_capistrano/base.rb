@@ -25,10 +25,10 @@ module RPCapistrano
 
         # SCM settings
         set :deploy_to, "/var/www/#{app_name}"
-        _cset :scm, 'git'
+        set :scm, 'git'
         set(:repository) { "git@nas01:#{app_name}" }
         _cset :branch, $1 if `git branch` =~ /\* (\S+)\s/m
-        _cset :deploy_via, :remote_cache
+        set :deploy_via, :remote_cache
         set :ssh_options, { :forward_agent => true }
 
         _cset :bundle_flags, "--deployment"
