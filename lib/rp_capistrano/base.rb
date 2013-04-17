@@ -2,7 +2,6 @@ require 'capistrano'
 require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'airbrake/capistrano'
-require 'rvm/capistrano'
 
 module RPCapistrano
   module Base
@@ -10,9 +9,6 @@ module RPCapistrano
       configuration.load do
         after 'deploy:restart', 'deploy:cleanup'
         before 'deploy:setup', 'rvm:create_gemset'
-
-        set :rvm_type, :system
-        _cset :rvm_ruby_string, :local
 
         # User details
         _cset :user,          'capi'

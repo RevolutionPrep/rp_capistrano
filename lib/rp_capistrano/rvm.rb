@@ -2,6 +2,10 @@ module RPCapistrano
   module Rvm
     def self.load_into(configuration)
       configuration.load do
+        set :rvm_type, :system
+        _cset :rvm_ruby_string, :local
+        require 'rvm/capistrano'
+
         before 'deploy:update_code', 'rp:rvm:info'
         after 'deploy:setup', 'rp:rvm:create_rake_wrapper'
 
