@@ -8,6 +8,7 @@ module RPCapistrano
 
         before 'deploy:update_code', 'rp:rvm:info'
         after 'deploy:setup', 'rp:rvm:create_rake_wrapper'
+        after 'deploy', 'rp:rvm:trust_rvmrc'
 
         namespace :rp do
           namespace :rvm do
@@ -25,6 +26,11 @@ module RPCapistrano
             task :create_rake_wrapper do
               ruby_version = /[0-9]\.[0-9]\.[0-9]/.match(rvm_ruby_string).to_s.gsub('.', '')
               run "rvm wrapper #{rvm_ruby_string} #{app_name}_#{ruby_version} rake"
+            end
+
+            desc "Trust rvmrc file"
+            task :trust_rvmrc do
+              run "rvm rvmrc trust #{release_path}"
             end
           end
         end
