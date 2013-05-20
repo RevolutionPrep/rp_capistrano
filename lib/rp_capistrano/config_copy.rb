@@ -13,9 +13,6 @@ module RPCapistrano
             task :cas_yml do
               run "cp #{release_path}/config/deploy/#{rails_env}/cas_server.yml #{release_path}/config/cas_server.yml"
             end
-            task :passenger_yml, :roles => :web do
-              run "cp #{release_path}/config/deploy/#{rails_env}/passenger.yml /etc/passenger.d/#{app_name}.yml && sudo service passenger restart #{app_name}"
-            end
             task :robots_txt do
               run "cp #{release_path}/config/deploy/#{rails_env}/robots.txt #{release_path}/public/robots.txt"
             end
