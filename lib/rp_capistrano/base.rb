@@ -52,6 +52,11 @@ module RPCapistrano
             end
           end
           before "deploy", "deploy:check_revision"
+
+          task :write_gitbr, :roles => :app do
+            put branch, "#{release_path}/.gitbr"
+          end
+          after "deploy", "deploy:write_gitbr"
         end
       end
     end
