@@ -1,6 +1,5 @@
 require 'capistrano'
 require 'capistrano_colors'
-require 'bundler/capistrano'
 require 'airbrake/capistrano'
 
 module RPCapistrano
@@ -31,7 +30,10 @@ module RPCapistrano
         set :deploy_via, :remote_cache
         set :ssh_options, { :forward_agent => true }
 
-        _cset :bundle_flags, "--deployment"
+        # Let rvm isolate the gems with gemsets
+        set :bundle_dir, nil
+        set :bundle_flags, nil
+        require 'bundler/capistrano'
 
         # Git settings for Capistrano
         default_run_options[:pty]     = true # needed for git password prompts
