@@ -7,8 +7,7 @@ module RPCapistrano
           after  'deploy:migrations', 'foreman:export'
           before 'foreman:export', 'foreman:copy_env'
           after  'foreman:export', 'foreman:stop'
-          after  'foreman:stop', 'foreman:kill_resque_processes'
-          after  'foreman:kill_resque_processes', 'foreman:start'
+          after  'foreman:stop', 'foreman:start'
 
           # Adapted from https://raw.github.com/ddollar/foreman/master/lib/foreman/capistrano.rb
           # for use with rvm
@@ -41,7 +40,7 @@ module RPCapistrano
             args << "-u #{foreman_user}"
             args << "-l #{foreman_log}"
             args << "-c #{foreman_concurrency}" if foreman_concurrency
-            run "cd #{latest_release} && rvmsudo #{bundle_cmd} exec foreman export #{args.join(' ')}"
+            run "cd #{latest_release} && #{sudo} echo 'Setting Upstart init' && rvmsudo #{bundle_cmd} exec foreman export #{args.join(' ')}"
           end
 
           desc "Start the application services"
@@ -67,11 +66,6 @@ module RPCapistrano
           desc "Copy env file to root path"
           task :copy_env, roles: :app do
             put File.read("config/deploy/#{rails_env}/env.txt"), "#{latest_release}/.env"
-          end
-
-          desc "kill resque processes"
-          task :kill_resque_processes, :roles => :app do 
-            run "pkill -3 -f resque- ; true"
           end
         end
       end

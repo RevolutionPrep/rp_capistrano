@@ -6,26 +6,22 @@ module RPCapistrano
   module Base
     def self.load_into(configuration)
       configuration.load do
-        after 'deploy:restart', 'deploy:cleanup'
+        after 'deploy', 'deploy:cleanup'
         before 'deploy:setup', 'rvm:create_gemset'
 
         # User details
-        _cset :user,          'capi'
-        _cset(:group)         { user }
-        _cset :sudo_user,     'www'
+        set :user,          'deployer'
+        #_cset(:group)         { user }
 
         # Application details
         _cset(:app_name)      { abort "Please specify the short name of your application, set :app_name, 'foo'" }
         set(:application)   { app_name }
         _cset :use_sudo,      false
 
-        _cset(:passenger_user) { sudo_user }
-        _cset(:passenger_group) { sudo_user }
-
         # SCM settings
-        set :deploy_to, "/var/www/#{app_name}"
+        set :deploy_to, "/home/#{user}/apps/#{application}"
         set :scm, 'git'
-        set(:repository) { "git@nas01:#{app_name}" }
+        set(:repository) { "git@github.com:RevolutionPrep/#{app_name}.git" }
         _cset :branch, $1 if `git branch` =~ /\* (\S+)\s/m
         set :deploy_via, :remote_cache
         set :ssh_options, { :forward_agent => true }
@@ -39,10 +35,7 @@ module RPCapistrano
         default_run_options[:pty]     = true # needed for git password prompts
 
         namespace :deploy do
-          task :start do ; end
-          task :stop do ; end
-          task :restart, :roles => :app, :except => { :no_release => true } do
-            run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+          task :restart do
           end
 
           desc "Make sure local git is in sync with remote."
