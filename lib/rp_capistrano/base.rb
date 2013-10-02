@@ -1,6 +1,6 @@
 require 'capistrano'
 require 'capistrano_colors'
-require 'airbrake/capistrano'
+#require 'airbrake/capistrano'
 
 module RPCapistrano
   module Base
